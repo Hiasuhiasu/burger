@@ -84,6 +84,7 @@ class BurgerBuilder extends Component{
         }
         queryParam.push('price=' + this.props.price);
         const queryString=queryParam.join('&');
+        this.props.onInitPurchase();
         this.props.history.push({
             pathname:'/checkout',
             search:'?'+queryString
@@ -129,9 +130,9 @@ class BurgerBuilder extends Component{
 
 const mapStateToProps =state=>{
     return{
-        ings: state.ingredients,
-        price:state.totalPrice,
-        errorState:state.error
+        ings: state.burgerBuilder.ingredients,
+        price:state.burgerBuilder.totalPrice,
+        errorState:state.burgerBuilder.error
     }
 }
 
@@ -139,7 +140,8 @@ const mapDispatchToProps=dispatch=>{
     return{
         onAddIngredient: (ingName)=>dispatch(burgerBuilderActions.addIngredient(ingName)),
         onRemoveIngredient: (ingName)=>dispatch(burgerBuilderActions.removeIngredient(ingName)),
-        onInitIngredients:()=>dispatch(burgerBuilderActions.initIngredients())
+        onInitIngredients:()=>dispatch(burgerBuilderActions.initIngredients()),
+        onInitPurchase:()=>dispatch(burgerBuilderActions.purchaseInit())
     }
 }  
 
