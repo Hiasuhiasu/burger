@@ -23,7 +23,7 @@ class Orders extends Component{
         //         console.log(res.data);
         //     })
         //     .catch(err=>this.setState({loading:false}))
-        this.props.onFetchOrders();
+        this.props.onFetchOrders(this.props.token);
     }
     render(){
         let order=<Spinner/>;
@@ -46,12 +46,13 @@ class Orders extends Component{
 const mapStateToProps =state=>{
     return {
         orders:state.order.orders,
-        loading:state.order.loading
+        loading:state.order.loading,
+        token: state.auth.token
     }
 };
 const mapDispatchToProps=dispatch=>{
     return{
-        onFetchOrders: ()=>dispatch(actions.fethcOrders())
+        onFetchOrders: (token)=>dispatch(actions.fethcOrders(token))
     }
 };
 export default connect(mapStateToProps,mapDispatchToProps)(withErrorHandler(Orders,axios));
