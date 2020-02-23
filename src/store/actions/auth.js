@@ -30,14 +30,19 @@ export const logOut =()=>{
     // localStorage.removeItem('userId');
     return {
         type: actionTypes.AUTH_INITIATE_LOGOUT
-    }
+    };
+}
+
+export const logoutSucceed =()=>{
+    return {
+        type: actionTypes.AUTH_LOGOUT
+    };
 }
 
 export const checkAuthTimeOut =(expirationTime)=>{
-    return dispatch =>{
-        setTimeout(()=>{
-            dispatch(logOut());
-        },expirationTime*1000);
+    return {
+        type: actionTypes.AUTH_CHECK_TIMEOUT,
+        expirationTime:expirationTime
     };
 }
 
