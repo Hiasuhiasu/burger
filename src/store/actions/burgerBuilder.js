@@ -26,13 +26,7 @@ export const fetchIngredientFaild=()=>{
     }
 };
 export const initIngredients =()=>{
-    return dispatch =>{
-        axios.get('/ingredients.json')
-            .then(response=>{
-                dispatch(setIngredients(response.data))
-            })
-            .catch(err=>{
-                dispatch(fetchIngredientFaild())
-            });
-    };
+    return {
+        type:actionType.INIT_INGREDIENT
+    }
 };
