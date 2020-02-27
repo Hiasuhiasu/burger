@@ -1,44 +1,39 @@
-import React,{Component} from 'react';
+import React,{useEffect, Suspense} from 'react';
 import {connect} from 'react-redux';
 import './App.css';
 import Layer from './components/Layers/Layer';
 import BurgerBuilder from './container/burgerBuilder/BurgerBuilder';
-// import CheckOut from './container/CheckOut/CheckOut';
-// import Auth from './container/Auth/Auth';
 import Logout from './container/Auth/Logout/Logout';
-// import Orders from './container/Orders/Orders';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import * as action from './store/actions/index';
-import asyncComponent from './hoc/acyncComponents/acyncComponent';
 
-const acyncCheckOut = asyncComponent(()=>{
+const CheckOut = React.lazy(()=>{
   return import('./container/CheckOut/CheckOut');
 });
-const acyncOrders = asyncComponent(()=>{
+const Orders = React.lazy(()=>{
   return import('./container/Orders/Orders');
 });
-const acyncAuth = asyncComponent(()=>{
+const Auth = React.lazy(()=>{
   return import('./container/Auth/Auth');
 });
 
-class App extends Component {
-  componentDidMount(){
-    this.props.onTryAutoSignup();
-  }
+const App = (props) => {
+  useEffect(()=>{
+    props.onTryAutoSignup();
+  },[]);
   
-  render(){
     let rout =(
       <Switch>
-        <Route path='/auth' component={acyncAuth}/>
+        <Route path='/auth' render={()=><Auth/>}/>
         <Route path ='/' exact component={BurgerBuilder}/>
         <Redirect to='/'/>
       </Switch>
     );
-    if(this.props.isAuthenticated){
+    if(props.isAuthenticated){
       rout=<Switch>
-          <Route path='/orders' component={acyncOrders}/>
-          <Route path='/auth' component={acyncAuth}/>
-          <Route path ='/checkout' component={acyncCheckOut}/>
+          <Route path='/orders' render ={()=><Orders/>}/>
+          <Route path='/auth' render={()=><Auth/>}/>
+          <Route path ='/checkout' render={()=><CheckOut/>}/>
           <Route path='/logout' component={Logout}/>
           <Route path ='/' exact component={BurgerBuilder}/>
           <Redirect to='/'/>
@@ -47,19 +42,12 @@ class App extends Component {
   return (
     <div >
       <Layer>
-        {/* <Switch>
-          <Route path='/orders' component={Orders}/>
-          <Route path ='/checkout' component={CheckOut}/>
-          <Route path='/auth' component={Auth}/>
-          <Route path='/logout' component={Logout}/>
-          <Route path ='/' exact component={BurgerBuilder}/>
-        </Switch> */}
-        {rout}
+          <Suspense fallback={<p>Loadin...</p>}>{rout}</Suspense> 
       </Layer>
     </div>
   );
-}
-}
+};
+
 const mapPropsToState =state =>{
   return{
     isAuthenticated: state.auth.token
