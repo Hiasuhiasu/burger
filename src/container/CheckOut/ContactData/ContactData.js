@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import Input from '../../../components/UI/Input/Input';
 import Button from '../../../components/UI/Button/Button';
@@ -8,98 +8,86 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';
 import styles from './ContactData.module.css';
 
-class ContactData extends Component{
-    state={
-        orderForm:{
-            name:{
-                elementType:'input',
-                elementConfig:{
-                    type:'text',
-                    placeholder:'Your name'
-                },
-                value:'Fury',
-                validation:{
-                    required:true
-                },
-                valid:false
+const  ContactData =props=>{
+    const [orderForm, setOrderForm]=useState({
+        name:{
+            elementType:'input',
+            elementConfig:{
+                type:'text',
+                placeholder:'Your name'
             },
-            email:{
-                elementType:'input',
-                elementConfig:{
-                    type:'text',
-                    placeholder:'Your email'
-                },
-                value:'dassa@kd.com',
-                validation:{
-                    required:true
-                },
-                valid:false
+            value:'Fury',
+            validation:{
+                required:true
             },
-            street:{
-                elementType:'input',
-                elementConfig:{
-                    type:'text',
-                    placeholder:'Your street'
-                },
-                value:'space whole',
-                validation:{
-                    required:true
-                },
-                valid:false
-            },
-            zipCode:{
-                elementType:'input',
-                elementConfig:{
-                    type:'text',
-                    placeholder:'Your zipcode'
-                },
-                value:'d0w 9wp',
-                validation:{
-                    required:true
-                },
-                valid:false
-            },
-            delivery:{
-                elementType:'select',
-                elementConfig:{
-                    options:[{value:'maybe', display:'Maybe'},
-                             {value:'never', display:'Never'}
-                            ]
-                },
-                validation:{
-                    required:false
-                },
-                value:'maybe'
-            }
+            valid:false
         },
-        loading:false,
-    }
-    orderHandler=(event)=>{
+        email:{
+            elementType:'input',
+            elementConfig:{
+                type:'text',
+                placeholder:'Your email'
+            },
+            value:'dassa@kd.com',
+            validation:{
+                required:true
+            },
+            valid:false
+        },
+        street:{
+            elementType:'input',
+            elementConfig:{
+                type:'text',
+                placeholder:'Your street'
+            },
+            value:'space whole',
+            validation:{
+                required:true
+            },
+            valid:false
+        },
+        zipCode:{
+            elementType:'input',
+            elementConfig:{
+                type:'text',
+                placeholder:'Your zipcode'
+            },
+            value:'d0w 9wp',
+            validation:{
+                required:true
+            },
+            valid:false
+        },
+        delivery:{
+            elementType:'select',
+            elementConfig:{
+                options:[{value:'maybe', display:'Maybe'},
+                         {value:'never', display:'Never'}
+                        ]
+            },
+            validation:{
+                required:false
+            },
+            value:'maybe'
+        }
+    });
+    
+    const orderHandler=(event)=>{
         event.preventDefault();
-        this.setState({loading:true});
         const orderData={};
-        for(let el in this.state.orderForm){
-            orderData[el]=this.state.orderForm[el].value;
+        for(let el in orderForm){
+            orderData[el]=orderForm[el].value;
         }
         const order={
-            ingredients:this.props.ings,
-            price:this.props.price,
+            ingredients:props.ings,
+            price:props.price,
             orderDetail:orderData,
-            userId:this.props.userId
+            userId:props.userId
         };
-        this.props.onOrderBurger(order, this.props.token);
-        // console.log(order);
-        // axios.post('/orders.json', order)
-        //     .then(resp=>{
-        //         this.setState({loading:false});
-        //         this.props.history.push('/');
-        //     })
-        //     .catch(err=>{
-        //         this.setState({loading:false});
-        //         console.log(err);
-        //     });
+        props.onOrderBurger(order, props.token);
     }
-    checkValidity(value, rules){
+
+    const checkValidity=(value, rules)=>{
         let isValid=false;
         if(rules.required){
             isValid=value.trim()!=='';
@@ -108,29 +96,29 @@ class ContactData extends Component{
         }
         return isValid;
     }
-    inputChangeHandler=(event, inputPoint)=>{
+    const inputChangeHandler=(event, inputPoint)=>{
         const updateOrderForm={
-            ...this.state.orderForm
+            ...orderForm
         };
         const innerUpdateForm={...updateOrderForm[inputPoint]};
         innerUpdateForm.value=event.target.value;
-        innerUpdateForm.valid=this.checkValidity(innerUpdateForm.value,innerUpdateForm.validation);
+        innerUpdateForm.valid=checkValidity(innerUpdateForm.value,innerUpdateForm.validation);
         updateOrderForm[inputPoint]=innerUpdateForm;
         console.log(innerUpdateForm);
-        this.setState({orderForm:updateOrderForm});
+        setOrderForm(updateOrderForm);
     }
-    render(){
-        const formElementsArray=[];
-        for(let key in this.state.orderForm){
+
+    const formElementsArray=[];
+        for(let key in orderForm){
             formElementsArray.push(
                 {
                     id:key,
-                    config:this.state.orderForm[key]
+                    config:orderForm[key]
                 }
             );
         }
         let form=(
-        <form onSubmit={this.orderHandler}>
+        <form onSubmit={orderHandler}>
             {
                 formElementsArray.map(
                     element=>(
@@ -141,14 +129,14 @@ class ContactData extends Component{
                             value={element.config.value}
                             invalid={!element.config.valid}
                             shouldValid={element.config.validation}
-                            changeValue={(event)=>this.inputChangeHandler(event,element.id)}
+                            changeValue={(event)=>inputChangeHandler(event,element.id)}
                         />
                     )
                 )
             }
             <Button btnType='Success' >Order</Button>
         </form>);
-        if(this.props.loading){
+        if(props.loading){
             form=<Spinner/>;
         }
         return(
@@ -157,7 +145,6 @@ class ContactData extends Component{
                 {form}
             </div>
         );
-    }
 }
 const mapStateToProps =state=>{
     return{

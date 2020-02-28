@@ -5,15 +5,15 @@ import CheckSummary from '../../components/Order/ChheckSummary/CheckSummary';
 import ContactData from './ContactData/ContactData';
 
 const CheckOut = props => {
-        const query=new URLSearchParams(props.location.search);
-        const ingredients={};
-        for(let param of query){
-            if(param[0] === 'price'){
-                price=param[1];
-            } else{
-                ingredients[param[0]]=+param[1];
-            }  
-        }
+        // const query=new URLSearchParams(props.location.search);
+        // const ingredients={};
+        // for(let param of query){
+        //     if(param[0] === 'price'){
+        //         price=param[1];
+        //     } else{
+        //         ingredients[param[0]]=+param[1];
+        //     }  
+        // }
 
     const cancelCheckoutHandler=()=>{
         props.history.goBack();
