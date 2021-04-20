@@ -4,16 +4,16 @@ import React from 'react';
 import {configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-configure({adapter:new Adapter});
+configure({adapter: new Adapter});
 
-describe('<BurgerBuilder/>',()=>{
-    let wrapper;
-    beforeEach(()=>{
-        wrapper=shallow(<BurgerBuilder onInitIngredients={()=>{}}/>);
-    });
+describe('<BurgerBuilder/>', ()=>{
+  let wrapper;
+  beforeEach(()=>{
+    wrapper=shallow(<BurgerBuilder onInitIngredients={()=>{}}/>);
+  });
 
-    it('build contorls then get ingredients',()=>{
-        wrapper.setProps({ings:{salad:0}});
-        expect(wrapper.find(BuildControls)).toHaveLength(1);
-    });
+  it('build contorls then get ingredients', ()=>{
+    wrapper.setProps({ings: {salad: 0}});
+    expect(wrapper.find(BuildControls)).toHaveLength(1);
+  });
 });

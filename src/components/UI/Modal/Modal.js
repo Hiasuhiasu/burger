@@ -1,20 +1,20 @@
 import React from 'react';
-import styles from './Modal.module.css'
+import styles from './Modal.module.css';
 import Backdrop from '../Backdrop/Backdrop';
 import Aux from '../../../hoc/Auxilary';
 
 const modal=(props)=>(
-    <Aux>
-        <Backdrop show={props.show}
-            hiden={props.hide}/>
+  <Aux>
+    <Backdrop show={props.show}
+      hiden={props.hide}/>
     <div className={styles.Modal}
-        style={{
-            transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
-            opacity: props.show ? '1' : '0'
-        }}>
-        {props.children}
+      style={{
+        transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
+        opacity: props.show ? '1' : '0',
+      }}>
+      {props.children}
     </div>
-    </Aux>
+  </Aux>
 );
 
 export default modal;

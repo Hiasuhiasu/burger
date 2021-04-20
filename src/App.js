@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import './App.css';
 import Layer from './components/Layers/Layer';
@@ -22,11 +22,11 @@ const acyncAuth = asyncComponent(()=>{
 });
 
 class App extends Component {
-  componentDidMount(){
+  componentDidMount() {
     this.props.onTryAutoSignup();
   }
-  
-  render(){
+
+  render() {
     let rout =(
       <Switch>
         <Route path='/auth' component={acyncAuth}/>
@@ -34,40 +34,40 @@ class App extends Component {
         <Redirect to='/'/>
       </Switch>
     );
-    if(this.props.isAuthenticated){
+    if (this.props.isAuthenticated) {
       rout=<Switch>
-          <Route path='/orders' component={acyncOrders}/>
-          <Route path='/auth' component={acyncAuth}/>
-          <Route path ='/checkout' component={acyncCheckOut}/>
-          <Route path='/logout' component={Logout}/>
-          <Route path ='/' exact component={BurgerBuilder}/>
-          <Redirect to='/'/>
-        </Switch>
+        <Route path='/orders' component={acyncOrders}/>
+        <Route path='/auth' component={acyncAuth}/>
+        <Route path ='/checkout' component={acyncCheckOut}/>
+        <Route path='/logout' component={Logout}/>
+        <Route path ='/' exact component={BurgerBuilder}/>
+        <Redirect to='/'/>
+      </Switch>;
     }
-  return (
-    <div >
-      <Layer>
-        {/* <Switch>
+    return (
+      <div >
+        <Layer>
+          {/* <Switch>
           <Route path='/orders' component={Orders}/>
           <Route path ='/checkout' component={CheckOut}/>
           <Route path='/auth' component={Auth}/>
           <Route path='/logout' component={Logout}/>
           <Route path ='/' exact component={BurgerBuilder}/>
         </Switch> */}
-        {rout}
-      </Layer>
-    </div>
-  );
-}
-}
-const mapPropsToState =state =>{
-  return{
-    isAuthenticated: state.auth.token
+          {rout}
+        </Layer>
+      </div>
+    );
   }
 }
-const mapDispatchToProps =dispatch=>{
-  return{
-    onTryAutoSignup:()=>dispatch(action.authCheckState())
+const mapPropsToState =(state) =>{
+  return {
+    isAuthenticated: state.auth.token,
   };
 };
-export default connect(mapPropsToState,mapDispatchToProps)(App);
+const mapDispatchToProps =(dispatch)=>{
+  return {
+    onTryAutoSignup: ()=>dispatch(action.authCheckState()),
+  };
+};
+export default connect(mapPropsToState, mapDispatchToProps)(App);
